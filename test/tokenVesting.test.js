@@ -57,10 +57,10 @@ describe('TokenVesting.sol', () => {
       const cliffDuration = 60 * 60 * 24 * 3
 
       await this.tv.connect(deployer).addVesting(payer1.address, claimable, startTime, duration, cliffDuration)
-      expect(await this.tv.claimable(payer1.address)).to.be.equal(claimable)
-      expect(await this.tv.startTime(payer1.address)).to.be.equal(startTime)
-      expect(await this.tv.duration(payer1.address)).to.be.equal(duration)
-      expect(await this.tv.cliffDuration(payer1.address)).to.be.equal(cliffDuration)
+      expect(await this.tv.getUserClaimable(payer1.address)).to.be.equal(claimable)
+      expect(await this.tv.getUserStartTime(payer1.address)).to.be.equal(startTime)
+      expect(await this.tv.getUserDuration(payer1.address)).to.be.equal(duration)
+      expect(await this.tv.getUserCliffDuration(payer1.address)).to.be.equal(cliffDuration)
     })
 
     it('Revert addVesting due to TokenVesting: invalid start time', async () => {

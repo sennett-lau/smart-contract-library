@@ -12,20 +12,40 @@ contract TokenVesting is Ownable {
 
     uint256 public constant PRECISION = 10 ** 12;
 
-    mapping (address => uint256) public startTime;
-
-    mapping (address => uint256) public duration;
-
-    mapping (address => uint256) public cliffDuration;
-
-    mapping (address => uint256) public claimed;
-
-    mapping (address => uint256) public claimable;
+    mapping(address => User) public users;
 
     event Claimed(address user, uint256 amount);
 
+    struct User {
+        uint256 startTime;
+        uint256 duration;
+        uint256 cliffDuration;
+        uint256 claimed;
+        uint256 claimable;
+    }
+
     constructor(IERC20 _vestingToken) {
         vestingToken = _vestingToken;
+    }
+
+    function getUserStartTime(address _user) external view returns (uint256) {
+        return users[_user].startTime;
+    }
+
+    function getUserDuration(address _user) external view returns (uint256) {
+        return users[_user].duration;
+    }
+
+    function getUserCliffDuration(address _user) external view returns (uint256) {
+        return users[_user].cliffDuration;
+    }
+
+    function getUserClaimed(address _user) external view returns (uint256) {
+        return users[_user].claimed;
+    }
+
+    function getUserClaimable(address _user) external view returns (uint256) {
+        return users[_user].claimable;
     }
 
     function addVesting(address _user, uint256 _amount, uint256 _startTime, uint256 _duration, uint256 _cliffDuration) external onlyOwner {
@@ -33,19 +53,20 @@ contract TokenVesting is Ownable {
         require(_duration > 0, "TokenVesting: invalid duration");
         require(_cliffDuration > 0 && _cliffDuration < _duration, "TokenVesting: invalid cliff duration");
 
-        claimable[_user] = _amount;
-        startTime[_user] = _startTime;
-        duration[_user] = _duration;
-        cliffDuration[_user] = _cliffDuration;
+        users[_user].claimable = _amount;
+        users[_user].startTime = _startTime;
+        users[_user].duration = _duration;
+        users[_user].cliffDuration = _cliffDuration;
     }
 
     function claim() external {
-        require(claimable[msg.sender] > 0, "TokenVesting: no claimable tokens");
-        require(block.timestamp >= startTime[msg.sender] + cliffDuration[msg.sender], "TokenVesting: cliff period has not passed");
-        uint256 claimDuration = block.timestamp > startTime[msg.sender] + duration[msg.sender] ? duration[msg.sender] : block.timestamp - startTime[msg.sender];
-        uint256 amount = claimable[msg.sender] * (claimDuration * PRECISION / duration[msg.sender]) / PRECISION - claimed[msg.sender];
+        User storage user = users[msg.sender];
+        require(user.claimable > 0, "TokenVesting: no claimable tokens");
+        require(block.timestamp >= user.startTime + user.cliffDuration, "TokenVesting: cliff period has not passed");
+        uint256 claimDuration = block.timestamp > user.startTime + user.duration ? user.duration : block.timestamp - user.startTime;
+        uint256 amount = user.claimable * (claimDuration * PRECISION / user.duration) / PRECISION - user.claimed;
         require(amount > 0, "TokenVesting: no claimable tokens");
-        claimed[msg.sender] += amount;
+        user.claimed += amount;
 
         vestingToken.approve(address(this), amount);
 

@@ -151,7 +151,8 @@ yarn run slither
 Contract
 
 #### Description:
-TokenVesting contract that supports single ERC20 in fixed vesting and cliff duration for different vesting amount multiple addresses that will be linearly distributed
+Vesting contract that supports single ERC20 that linearly distributes tokens over time.
+Each address can contain its own vesting schedule including the start time, duration, cliff duration and amount of tokens.
 
 #### Deployment:
 1. Deploy the contract with the vesting token address
