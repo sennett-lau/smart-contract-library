@@ -11,6 +11,7 @@
 - [Post Contract & Test Development Steps](#post-contract-test-development-steps)
 - [Contract List](#contract-list)
     - Contracts
+        - [`TokenVesting`](#tokenvestingsol)
         - [`VRFRandomNumberGenerator`](#vrfrandomnumbergeneratorsol)
     - Utility Contracts
         - [`Payable`](#payablesol)
@@ -128,6 +129,7 @@ yarn run slither
 
 ## Contract List
 ### Contracts
+- [`TokenVesting`](#tokenvestingsol)
 - [`VRFRandomNumberGenerator`](#vrfrandomnumbergeneratorsol)
 
 ### Utility Contracts
@@ -142,6 +144,22 @@ yarn run slither
 - `IRandomNumberGenerator`
 
 ## Contracts Description
+
+### TokenVesting.sol
+
+#### Type:
+Contract
+
+#### Description:
+TokenVesting contract that supports single ERC20 in fixed vesting and cliff duration for different vesting amount multiple addresses that will be linearly distributed
+
+#### Deployment:
+1. Deploy the contract with the vesting token address
+2. Transfer sufficient amount of vesting token to the contract
+
+#### Implementation:
+
+1. Use `addVesting` to add a vesting wallet to the contract
 
 ### VRFRandomNumberGenerator.sol
 
