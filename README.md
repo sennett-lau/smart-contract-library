@@ -18,7 +18,7 @@
         - [`StakingPeriodControl`](#stakingperiodcontrolsol)
         - [`Whitelist`](#whitelistsol)
     - Contract Interfaces
-        - `IERC721Burnable`
+        - [`IERC721Burnable`](#ierc721burnablesol)
         - `IERC721Minable`
         - `IERC721MinterBurnable`
         - `IRandomNumberGenerator`
@@ -138,7 +138,7 @@ yarn run slither
 - [`Whitelist`](#whitelistsol)
 
 ### Contract Interfaces
-- `IERC721Burnable`
+- [`IERC721Burnable`](#ierc721burnablesol)
 - `IERC721Minable`
 - `IERC721MinterBurnable`
 - `IRandomNumberGenerator`
@@ -327,3 +327,18 @@ const proof = tree.getProof(leaf)
 await contract.fn(proof)
 ```
 
+### IERC721Burnable.sol
+
+#### Type:
+Contract Interface
+
+#### Description:
+Interface ERC721 with burn function supported
+
+#### Inheritance:
+- `IERC721`
+- `IERC721Metadata`
+- `IERC721Enumerable`
+
+#### Functions:
+- `burn(uint256 tokenId)`
